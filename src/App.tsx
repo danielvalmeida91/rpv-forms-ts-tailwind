@@ -1,36 +1,30 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useState } from "react"
 import { useForm } from "react-hook-form"
 import * as z from 'zod'
+import { Input } from "./components/Input"
+
+const regrasFormulario = z.object({
+  nome: z.string().min(1, 'Campo obrigatório.').max(20, 'Máximo 20 caracteres.'),
+  email: z.email('Campo obrigatório.'),
+  cep: z.string().min(1, 'Campo obrigatório.'),
+  rua: z.string().min(1, 'Campo obrigatório.'),
+  numero: z.string().min(1, 'Campo obrigatório.'),
+  bairro: z.string().min(1, 'Campo obrigatório.'),
+  cidade: z.string().min(1, 'Campo obrigatório.'),
+  uf: z.string().min(1, 'Campo obrigatório.').max(2, 'Utilizar sigla.')
+})
+
+type FormType = z.infer<typeof regrasFormulario>
 
 export function App() {
-  const regrasFormulario = z.object({
-    nome: z.string().min(1, 'Campo obrigatório.').max(20, 'Máximo 20 caracteres.'),
-    email: z.email('Campo obrigatório.'),
-    cep: z.string().min(1, 'Campo obrigatório.'),
-    rua: z.string().min(1, 'Campo obrigatório.'),
-    numero: z.string().min(1, 'Campo obrigatório.'),
-    bairro: z.string().min(1, 'Campo obrigatório.'),
-    cidade: z.string().min(1, 'Campo obrigatório.'),
-    uf: z.string().min(1, 'Campo obrigatório.').max(2, 'Utilizar sigla.')
-  })
-
-  type FormType = z.infer<typeof regrasFormulario>
-
   const {
     handleSubmit,
     register,
-    watch,
     formState: { errors }
   } = useForm<FormType>({
-    // defaultValues: {
-    //   nome: 'Hugo',
-    //   email: 'hugolagrimante@gmail.com'
-    // },
     resolver: zodResolver(regrasFormulario)
   })
 
-  console.log(errors)
   function enviaFormulario(data: FormType) {
     console.log(data)
   }
@@ -39,87 +33,63 @@ export function App() {
     <>
       <div className="">
         <h1>Cadastro de Cliente</h1>
-        <form onSubmit={handleSubmit(enviaFormulario)} noValidate className="w-full max-w-4xl mx-auto">
+        <form onSubmit={handleSubmit(enviaFormulario)} noValidate className="w-full max-w-xl mx-auto bg-white p-8 rounded-lg shadow-md">
           <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-12 flex flex-col">
-              <label htmlFor="nome" className="text-sm font-medium text-gray-700 mb-1">Nome</label>
-              <input
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                type="text"
-                {...register('nome')}
-              />
-              {errors.nome && <p className="text-red-500 text-xs mt-1">{errors.nome.message}</p>}
-            </div>
+            <Input
+              label="Nome"
+              registration={register('nome')}
+              error={errors.nome}
+              containerClassName="col-span-12"
+            />
 
-            <div className="col-span-12 flex flex-col">
-              <label htmlFor="email" className="text-sm font-medium text-gray-700 mb-1">Email</label>
-              <input
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                type="email"
-                {...register('email')}
-              />
-              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
-            </div>
+            <Input
+              label="Email"
+              type="email"
+              registration={register('email')}
+              error={errors.email}
+            />
 
-            <div className="col-span-12 md:col-span-6 flex flex-col">
-              <label htmlFor="cep" className="text-sm font-medium text-gray-700 mb-1">CEP</label>
-              <input
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                type="text"
-                {...register('cep')}
-              />
-              {errors.cep && <p className="text-red-500 text-xs mt-1">{errors.cep.message}</p>}
-            </div>
+            <Input
+              label="CEP"
+              registration={register('cep')}
+              error={errors.cep}
+              containerClassName="col-span-12 md:col-span-3"
+            />
 
-            <div className="col-span-12 md:col-span-6 flex flex-col">
-              <label htmlFor="rua" className="text-sm font-medium text-gray-700 mb-1">Rua</label>
-              <input
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                type="text"
-                {...register('rua')}
-              />
-              {errors.rua && <p className="text-red-500 text-xs mt-1">{errors.rua.message}</p>}
-            </div>
+            <Input
+              label="Rua"
+              registration={register('rua')}
+              error={errors.rua}
+              containerClassName="col-span-12 md:col-span-7"
+            />
 
-            <div className="col-span-12 md:col-span-6 flex flex-col">
-              <label htmlFor="numero" className="text-sm font-medium text-gray-700 mb-1">Número</label>
-              <input
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                type="text"
-                {...register('numero')}
-              />
-              {errors.numero && <p className="text-red-500 text-xs mt-1">{errors.numero.message}</p>}
-            </div>
+            <Input
+              label="Número"
+              registration={register('numero')}
+              error={errors.numero}
+              containerClassName="col-span-12 md:col-span-2"
+            />
 
-            <div className="col-span-12 md:col-span-6 flex flex-col">
-              <label htmlFor="bairro" className="text-sm font-medium text-gray-700 mb-1">Bairro</label>
-              <input
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                type="text"
-                {...register('bairro')}
-              />
-              {errors.bairro && <p className="text-red-500 text-xs mt-1">{errors.bairro.message}</p>}
-            </div>
+            <Input
+              label="Bairro"
+              registration={register('bairro')}
+              error={errors.bairro}
+              containerClassName="col-span-12 md:col-span-4"
+            />
 
-            <div className="col-span-12 md:col-span-6 flex flex-col">
-              <label htmlFor="cidade" className="text-sm font-medium text-gray-700 mb-1">Cidade</label>
-              <input
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                type="text"
-                {...register('cidade')}
-              />
-              {errors.cidade && <p className="text-red-500 text-xs mt-1">{errors.cidade.message}</p>}
-            </div>
+            <Input
+              label="Cidade"
+              registration={register('cidade')}
+              error={errors.cidade}
+              containerClassName="col-span-12 md:col-span-4"
+            />
 
-            <div className="col-span-12 md:col-span-6 flex flex-col">
-              <label htmlFor="uf" className="text-sm font-medium text-gray-700 mb-1">UF</label>
-              <input
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                type="text"
-                {...register('uf')}
-              />
-              {errors.uf && <p className="text-red-500 text-xs mt-1">{errors.uf.message}</p>}
-            </div>
+            <Input
+              label="UF"
+              registration={register('uf')}
+              error={errors.uf}
+              containerClassName="col-span-12 md:col-span-4"
+            />
           </div>
 
           <div className="flex gap-4 mt-6 justify-end">
