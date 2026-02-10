@@ -1,14 +1,15 @@
+import { twMerge } from "tailwind-merge"
+
 interface IQuadrado {
-    ehArredondado: boolean
-    ehAzul?: boolean
-    // width: string
-    // height: string
+    className?: string
+    // text: string
+    children: React.ReactNode
 }
 
-export function Quadrado({ ehArredondado = false, ehAzul }: IQuadrado) {
+export function Quadrado({ className, children }: IQuadrado) {
     return (
         <>
-            <div className={`${ehAzul === true ? "bg-blue-400" : "bg-black"} w-[100px] h-[100px] text-zinc-50 ${ehArredondado === true ? 'rounded-2xl' : ''}`}>Teste</div>
+            <div className={twMerge('bg-black w-[100px] h-[100px] text-zinc-50', className)}>{children}</div>
         </>
     )
 }
