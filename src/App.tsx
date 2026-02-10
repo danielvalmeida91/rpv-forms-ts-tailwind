@@ -2,10 +2,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import * as z from 'zod'
+import { Quadrado } from "./components/quadrado"
 
 export function App() {
+  const [nome, setNome] = useState('')
   const regrasFormulario = z.object({
-    nome: z.string().min(1, 'Campo obrigatório.').max(20, 'Máximo 20 caracteres.'),
+    nome: z.string().min(1, 'Este campo é obrigatório.').max(20, 'Máximo 20 caracteres.'),
     email: z.email('Campo obrigatório.'),
     cep: z.string().min(1, 'Campo obrigatório.'),
     rua: z.string().min(1, 'Campo obrigatório.'),
@@ -17,108 +19,111 @@ export function App() {
 
   type FormType = z.infer<typeof regrasFormulario>
 
-  const {
-    handleSubmit,
-    register,
-    watch,
-    formState: { errors }
-  } = useForm<FormType>({
-    // defaultValues: {
-    //   nome: 'Hugo',
-    //   email: 'hugolagrimante@gmail.com'
-    // },
+  // const {
+  //   handleSubmit,
+  //   register,
+  //   watch,
+  //   formState: { errors }
+  // } = useForm<FormType>({
+  //   // defaultValues: {
+  //   //   nome: 'Hugo',
+  //   //   email: 'hugolagrimante@gmail.com'
+  //   // },
+  //   resolver: zodResolver(regrasFormulario)
+  // })
+
+  const formulario = useForm<FormType>({
     resolver: zodResolver(regrasFormulario)
   })
 
-  console.log(errors)
-  function enviaFormulario(data: FormType) {
-    console.log(data)
+  console.log("Erros do formulário -> ", formulario.formState.errors)
+  function enviaFormulario() {
   }
 
   return (
     <>
-      <div className="">
-        <h1>Cadastro de Cliente</h1>
-        <form onSubmit={handleSubmit(enviaFormulario)} noValidate className="w-full max-w-4xl mx-auto">
+      <div>
+        <h1 className="font-sans">Cadastro de Cliente</h1>
+        <form onSubmit={formulario.handleSubmit(enviaFormulario)} noValidate className="w-full max-w-4xl mx-auto">
           <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-12 flex flex-col">
+            <div className="col-span-12 flex flex-col py-1 relative">
               <label htmlFor="nome" className="text-sm font-medium text-gray-700 mb-1">Nome</label>
               <input
                 className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 type="text"
-                {...register('nome')}
+                {...formulario.register('nome')}
               />
-              {errors.nome && <p className="text-red-500 text-xs mt-1">{errors.nome.message}</p>}
+              {formulario.formState.errors.nome && <p className="text-red-500 text-xs mt-1 absolute -bottom-3 left-0">{formulario.formState.errors.nome.message}</p>}
             </div>
 
-            <div className="col-span-12 flex flex-col">
+            <div className="col-span-12 flex flex-col py-1 relative">
               <label htmlFor="email" className="text-sm font-medium text-gray-700 mb-1">Email</label>
               <input
                 className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 type="email"
-                {...register('email')}
+                {...formulario.register('email')}
               />
-              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+              {formulario.formState.errors.email && <p className="text-red-500 text-xs mt-1 absolute -bottom-3 left-0">{formulario.formState.errors.email.message}</p>}
             </div>
 
-            <div className="col-span-12 md:col-span-6 flex flex-col">
+            <div className="col-span-12 md:col-span-6 flex flex-col py-1 relative">
               <label htmlFor="cep" className="text-sm font-medium text-gray-700 mb-1">CEP</label>
               <input
                 className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 type="text"
-                {...register('cep')}
+                {...formulario.register('cep')}
               />
-              {errors.cep && <p className="text-red-500 text-xs mt-1">{errors.cep.message}</p>}
+              {formulario.formState.errors.cep && <p className="text-red-500 text-xs mt-1 absolute -bottom-3 left-0">{formulario.formState.errors.cep.message}</p>}
             </div>
 
-            <div className="col-span-12 md:col-span-6 flex flex-col">
+            <div className="col-span-12 md:col-span-6 flex flex-col py-1 relative">
               <label htmlFor="rua" className="text-sm font-medium text-gray-700 mb-1">Rua</label>
               <input
                 className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 type="text"
-                {...register('rua')}
+                {...formulario.register('rua')}
               />
-              {errors.rua && <p className="text-red-500 text-xs mt-1">{errors.rua.message}</p>}
+              {formulario.formState.errors.rua && <p className="text-red-500 text-xs mt-1 absolute -bottom-3 left-0">{formulario.formState.errors.rua.message}</p>}
             </div>
 
-            <div className="col-span-12 md:col-span-6 flex flex-col">
+            <div className="col-span-12 md:col-span-6 flex flex-col py-1 relative">
               <label htmlFor="numero" className="text-sm font-medium text-gray-700 mb-1">Número</label>
               <input
                 className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 type="text"
-                {...register('numero')}
+                {...formulario.register('numero')}
               />
-              {errors.numero && <p className="text-red-500 text-xs mt-1">{errors.numero.message}</p>}
+              {formulario.formState.errors.numero && <p className="text-red-500 text-xs mt-1 absolute -bottom-3 left-0">{formulario.formState.errors.numero.message}</p>}
             </div>
 
-            <div className="col-span-12 md:col-span-6 flex flex-col">
+            <div className="col-span-12 md:col-span-6 flex flex-col py-1 relative">
               <label htmlFor="bairro" className="text-sm font-medium text-gray-700 mb-1">Bairro</label>
               <input
                 className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 type="text"
-                {...register('bairro')}
+                {...formulario.register('bairro')}
               />
-              {errors.bairro && <p className="text-red-500 text-xs mt-1">{errors.bairro.message}</p>}
+              {formulario.formState.errors.bairro && <p className="text-red-500 text-xs mt-1 absolute -bottom-3 left-0">{formulario.formState.errors.bairro.message}</p>}
             </div>
 
-            <div className="col-span-12 md:col-span-6 flex flex-col">
+            <div className="col-span-12 md:col-span-6 flex flex-col py-1 relative">
               <label htmlFor="cidade" className="text-sm font-medium text-gray-700 mb-1">Cidade</label>
               <input
                 className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 type="text"
-                {...register('cidade')}
+                {...formulario.register('cidade')}
               />
-              {errors.cidade && <p className="text-red-500 text-xs mt-1">{errors.cidade.message}</p>}
+              {formulario.formState.errors.cidade && <p className="text-red-500 text-xs mt-1 absolute -bottom-3 left-0">{formulario.formState.errors.cidade.message}</p>}
             </div>
 
-            <div className="col-span-12 md:col-span-6 flex flex-col">
+            <div className="col-span-12 md:col-span-6 flex flex-col py-1 relative">
               <label htmlFor="uf" className="text-sm font-medium text-gray-700 mb-1">UF</label>
               <input
                 className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 type="text"
-                {...register('uf')}
+                {...formulario.register('uf')}
               />
-              {errors.uf && <p className="text-red-500 text-xs mt-1">{errors.uf.message}</p>}
+              {formulario.formState.errors.uf && <p className="text-red-500 text-xs mt-1 absolute -bottom-3 left-0">{formulario.formState.errors.uf.message}</p>}
             </div>
           </div>
 
@@ -136,6 +141,14 @@ export function App() {
               Enviar
             </button>
           </div>
+
+          <Quadrado />
+          <Quadrado ehArredondado ehAzul />
+          <Quadrado />
+          <Quadrado ehArredondado ehAzul />
+          <Quadrado />
+          <Quadrado ehArredondado ehAzul />
+          <Quadrado />
         </form>
       </div>
     </>
